@@ -4,6 +4,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QMessageBox>
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -17,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     field = Field::initInstance(scene);
     connect(field, SIGNAL(scoreChanged(int)), this, SLOT(updateScore(int)));
     connect(field, SIGNAL(gameOver()), this, SLOT(gameOver()));
-    field->initGame(Lines);
+    m_gameType = Lines;
+    field->initGame(m_gameType);
 
     connect(view, SIGNAL(mousePressed(QMouseEvent *)), this, SLOT(mousePressed(QMouseEvent *)));
 }
@@ -35,12 +37,30 @@ void MainWindow::mousePressed(QMouseEvent *event)
 
 void MainWindow::newGame()
 {
-    field->initGame(Lines);
+    field->initGame(m_gameType);
+}
+
+void MainWindow::newGameLines()
+{
+    m_gameType = Lines;
+    field->initGame(m_gameType);
+}
+
+void MainWindow::newGameSquares()
+{
+    m_gameType = Squares;
+    field->initGame(m_gameType);
+}
+
+void MainWindow::newGameBlocks()
+{
+    m_gameType = Blocks;
+    field->initGame(m_gameType);
 }
 
 void MainWindow::updateScore(int score)
 {
-    setWindowTitle(QString("lines-qt (Score: %1").arg(score));
+    setWindowTitle(QString("lines-qt (Score: %1)").arg(score));
 }
 
 void MainWindow::gameOver()
@@ -53,12 +73,42 @@ void MainWindow::buildMenu()
 {
     QMenuBar *mb = menuBar();
 
-    QMenu *gameMenu = new QMenu;
-    gameMenu->setTitle(tr("&Game"));
+    QMenu *gameMenu = new QMenu(tr("&Game"));
     mb->addMenu(gameMenu);
 
     QAction *aNewGame = new QAction(tr("&New Game"), this);
     aNewGame->setShortcut(QKeySequence("F2"));
     connect(aNewGame, SIGNAL(triggered(bool)), this, SLOT(newGame()));
     gameMenu->addAction(aNewGame);
+
+    gameMenu->addSeparator();
+
+    QAction *aNewGameLines = new QAction(tr("New &Lines Game"), this);
+    aNewGameLines->setShortcut(QKeySequence("F3"));
+    connect(aNewGameLines, SIGNAL(triggered(bool)), this, SLOT(newGameLines()));
+    gameMenu->addAction(aNewGameLines);
+
+    QAction *aNewGameSquares = new QAction(tr("New &Squares Game"), this);
+    aNewGameSquares->setShortcut(QKeySequence("F4"));
+    connect(aNewGameSquares, SIGNAL(triggered(bool)), this, SLOT(newGameSquares()));
+    gameMenu->addAction(aNewGameSquares);
+
+    QAction *aNewGameBlocks = new QAction(tr("New &Blocks Game"), this);
+    aNewGameBlocks->setShortcut(QKeySequence("F5"));
+    connect(aNewGameBlocks, SIGNAL(triggered(bool)), this, SLOT(newGameBlocks()));
+    gameMenu->addAction(aNewGameBlocks);
+
+    gameMenu->addSeparator();
+
+    QAction *aQuit = new QAction(tr("&Quit"), this);
+    connect(aQuit, SIGNAL(triggered(bool)), this, SLOT(close()));
+    gameMenu->addAction(aQuit);
+
+    QMenu *helpMenu = new QMenu(tr("&Help"));
+    mb->addMenu(helpMenu);
+
+    QAction *aAboutQt = new QAction(tr("About &Qt"), this);
+    connect(aAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
+    helpMenu->addAction(aAboutQt);
+
 }

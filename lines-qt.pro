@@ -1,4 +1,4 @@
-QT += widgets svg
+QT += widgets svg multimedia
 CONFIG += c++11
 TEMPLATE = app
 TARGET = lines-qt

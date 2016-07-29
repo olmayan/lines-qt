@@ -279,6 +279,9 @@ void Field::activate(QPoint point)
 
     if (at(point))
     {
+        if (m_sel != point)
+            ResourceLoader::instance()->selectSound()->play();
+
         m_sel = point;
         m_selItem->setPos(point * CELL_SIZE);
         m_selItem->setVisible(true);
@@ -298,7 +301,7 @@ void Field::activate(QPoint point)
 void Field::unselect()
 {
     m_sel = QPoint(-1, -1);
-    m_selItem->setVisible(false);;
+    m_selItem->setVisible(false);
 }
 
 QPoint Field::selected()
@@ -348,7 +351,7 @@ void Field::moveSelected(QPoint destination)
 
     if (!bHasPath)
     {
-        // TODO : play sound
+        ResourceLoader::instance()->error()->play();
         return;
     }
 
@@ -559,6 +562,7 @@ void Field::deleteBalls()
 #endif
     setScore(score() + count * (count - (nBalls - 1)));
     group->connect(group, SIGNAL(finished()), this, SLOT(finishDeletion()));
+    ResourceLoader::instance()->pop()->play();
     group->start(QAbstractAnimation::DeleteWhenStopped);
 }
 

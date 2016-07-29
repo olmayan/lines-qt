@@ -21,6 +21,9 @@ public slots:
     void test();
     void mousePressed(QMouseEvent *event);
     void newGame();
+    void newGameLines();
+    void newGameSquares();
+    void newGameBlocks();
     void updateScore(int);
     void gameOver();
 
@@ -30,6 +33,7 @@ private:
     QGraphicsScene *scene;
     QGraphicsView *view;
     Field *field;
+    GameType m_gameType;
 };
 
 #endif // MAINWINDOW_H
