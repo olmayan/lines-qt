@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>ball_.svg</file>
+        <file>ball1.svg</file>
+        <file>ball2.svg</file>
+        <file>ball3.svg</file>
+        <file>ball4.svg</file>
+        <file>ball5.svg</file>
+        <file>ball6.svg</file>
+        <file>ball7.svg</file>
+        <file>pathmarker.svg</file>
+        <file>select.svg</file>
+        <file>tile.svg</file>
+    </qresource>
+</RCC>
